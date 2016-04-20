@@ -1,3 +1,6 @@
+require "yaml"
+MESSAGES = YAML.load_file('calculator_messages.yml')
+
 def prompt(message)
   puts "=> #{message}"
 end
@@ -37,12 +40,12 @@ puts "***Welcome to the Calculator***"
 
 name = ''
 loop do
-  prompt("Please enter your name:")
+  prompt(MESSAGES['name'])
   print ">"
   name = gets.chomp
 
   break unless name.empty?
-  prompt("Oops, you forgot to enter your name.")
+  prompt(MESSAGES['missing_name'])
 end
 
 prompt("Hi, Nice to meet you, #{name}")
