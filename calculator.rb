@@ -3,13 +3,7 @@ def prompt(message)
 end
 
 def valid_num?(num)
-  if num[0] == "0"
-    true
-  elsif num.to_i != 0
-    true
-  else
-    false 
-  end
+  return true if num[0] == "0" || num.to_i != 0
 end
 
 def operation_to_msg(ops)
@@ -38,7 +32,7 @@ def choose_ops(ops, num1, num2)
   end
 end
 
-#asks for two numbers
+# asks for two numbers
 puts "***Welcome to the Calculator***"
 
 name = ''
@@ -47,29 +41,21 @@ loop do
   print ">"
   name = gets.chomp
 
-  if name.empty?
-    prompt("Oops, you forgot to enter your name.")
-  else
-    break
-  end
+  break unless name.empty?
+  prompt("Oops, you forgot to enter your name.")
 end
-
 
 prompt("Hi, Nice to meet you, #{name}")
 
 loop do
-
   num1 = ''
   loop do
     prompt("Enter your first number:")
     print ">"
     num1 = gets.chomp
 
-    if valid_num?(num1)
-      break
-    else
-      prompt("Hmmm...that doesn't look like a valid number. Let's try again.")
-    end
+    break if valid_num?(num1)
+    prompt("Hmmm...that doesn't look like a valid number. Let's try again.")
   end
 
   num2 = ''
@@ -77,15 +63,12 @@ loop do
     prompt("Enter your second number:")
     print ">"
     num2 = gets.chomp
-    
-    if valid_num?(num2)
-      break
-    else
-      prompt("Hmmm...that doesn't look like a valid number. Let's try again")
-    end
+
+    break if valid_num?(num2)
+    prompt("Hmmm...that doesn't look like a valid number. Let's try again")
   end
 
-  #asks for the type of operation to perform: add, subtract, multiply or divide
+  # asks for the type of operation to perform: add, subtract, multiply or divide
 
   operator_prompt = <<-MSG
   Choose your operation:
@@ -101,7 +84,7 @@ loop do
 
   ops_array = %w(1 2 3 4)
 
-  until ops_array.include?(ops) do
+  until ops_array.include?(ops)
     prompt("The program does not recognize the operation. Please try again:")
     print ">"
     ops = gets.chomp.downcase
@@ -113,7 +96,7 @@ loop do
 
   puts "-------------------------------------------------------------"
 
-  #display the result
+  # display the result
   prompt("Based on your choice, the calculated answer is >>> #{result}")
 
   prompt("Do you want to perform another calculation? If so, please press \"Y\". Otherwise, press any other key to quit")
@@ -121,4 +104,4 @@ loop do
   break unless response == "y"
 end
 
-  prompt("Thank you for using the calculator. Goodbye")
+prompt("Thank you for using the calculator. Goodbye")
