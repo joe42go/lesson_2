@@ -1,13 +1,13 @@
 def choose_ops(ops, num1, num2)
   case ops
   when "add"
-    result = num1 + num2
+    result = num1.to_i + num2.to_i
   when "subtract"
-    result = num1 - num2
+    result = num1.to_i - num2.to_i
   when "multiply"
-    result = num1 * num2
+    result = num1.to_i * num2.to_i
   else
-    result = num1 / num2
+    result = num1.to_f / num2.to_f
   end
 end
 
@@ -15,12 +15,12 @@ end
 
 puts "Enter your first number:"
 print ">"
-num1 = gets.chomp.to_i
+num1 = gets.chomp
 puts "Great, you've entered #{num1}"
 
 puts "Enter your second number:"
 print ">"
-num2 = gets.chomp.to_i
+num2 = gets.chomp
 puts "Done, you've entered #{num2}"
 
 #asks for the type of operation to perform: add, subtract, multiply or divide
