@@ -1,44 +1,124 @@
+def prompt(message)
+  puts "=> #{message}"
+end
+
+def valid_num?(num)
+  if num[0] == "0"
+    true
+  elsif num.to_i != 0
+    true
+  else
+    false 
+  end
+end
+
+def operation_to_msg(ops)
+  case ops
+  when '1'
+    "Adding"
+  when '2'
+    "Subtracting"
+  when '3'
+    "Multiplying"
+  when '4'
+    "Dividing"
+  end
+end
+
 def choose_ops(ops, num1, num2)
   case ops
-  when "add"
-    result = num1.to_i + num2.to_i
-  when "subtract"
-    result = num1.to_i - num2.to_i
-  when "multiply"
-    result = num1.to_i * num2.to_i
+  when '1'
+    num1.to_i + num2.to_i
+  when '2'
+    num1.to_i - num2.to_i
+  when '3'
+    num1.to_i * num2.to_i
   else
-    result = num1.to_f / num2.to_f
+    num1.to_f / num2.to_f
   end
 end
 
 #asks for two numbers
+puts "***Welcome to the Calculator***"
 
-puts "Enter your first number:"
-print ">"
-num1 = gets.chomp
-puts "Great, you've entered #{num1}"
-
-puts "Enter your second number:"
-print ">"
-num2 = gets.chomp
-puts "Done, you've entered #{num2}"
-
-#asks for the type of operation to perform: add, subtract, multiply or divide
-puts "Now, choose your operation - add, subtract, multiply or divide:"
-print ">"
-ops = gets.chomp.downcase
-
-ops_array = ['add', 'subtract', 'multiply', 'divide']
-
-until ops_array.include?(ops) do
-  puts "The program does not recognize the operation. Please try again:"
+name = ''
+loop do
+  prompt("Please enter your name:")
   print ">"
-  ops = gets.chomp.downcase
+  name = gets.chomp
+
+  if name.empty?
+    prompt("Oops, you forgot to enter your name.")
+  else
+    break
+  end
 end
 
-result = choose_ops(ops, num1, num2)
 
-puts "------------------------------------------------"
+prompt("Hi, Nice to meet you, #{name}")
 
-#display the result
-puts "Based on your choice, the calculated answer is >>> #{result}"
+loop do
+
+  num1 = ''
+  loop do
+    prompt("Enter your first number:")
+    print ">"
+    num1 = gets.chomp
+
+    if valid_num?(num1)
+      break
+    else
+      prompt("Hmmm...that doesn't look like a valid number. Let's try again.")
+    end
+  end
+
+  num2 = ''
+  loop do
+    prompt("Enter your second number:")
+    print ">"
+    num2 = gets.chomp
+    
+    if valid_num?(num2)
+      break
+    else
+      prompt("Hmmm...that doesn't look like a valid number. Let's try again")
+    end
+  end
+
+  #asks for the type of operation to perform: add, subtract, multiply or divide
+
+  operator_prompt = <<-MSG
+  Choose your operation:
+  1) add
+  2) subtract
+  3) multiply
+  4) divide
+  MSG
+
+  prompt(operator_prompt)
+  print ">"
+  ops = gets.chomp.downcase
+
+  ops_array = %w(1 2 3 4)
+
+  until ops_array.include?(ops) do
+    prompt("The program does not recognize the operation. Please try again:")
+    print ">"
+    ops = gets.chomp.downcase
+  end
+
+  result = choose_ops(ops, num1, num2)
+
+  prompt("#{operation_to_msg(ops)} the two numbers...")
+
+  puts "-------------------------------------------------------------"
+
+  #display the result
+  prompt("Based on your choice, the calculated answer is >>> #{result}")
+
+  prompt("Do you want to perform another calculation? If so, please press \"Y\". Otherwise, press any other key to quit")
+  response = gets.chomp.downcase
+  break unless response == "y"
+end
+
+  prompt("Thank you for using the calculator. Goodbye")
