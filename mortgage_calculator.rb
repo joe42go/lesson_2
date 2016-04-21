@@ -23,21 +23,21 @@ loop do
   loop do
     prompt("Enter your loan amount:")
     loan_amount = gets.chomp
-    break unless loan_amount.empty? || loan_amount.match(/[a-zA-Z]/)
+    break unless loan_amount.empty? || loan_amount.match(/[a-zA-Z]/) || loan_amount.to_f < 0
   end
 
   apr = ''
   loop do
-    prompt("What is your APR (in decimal):")
+    prompt("What is your APR (in decimal e.g. For 4.75%, enter 0.0475 or .0475):")
     apr = gets.chomp
-    break unless apr.empty? || apr.match(/[a-zA-Z]/)
+    break unless apr.empty? || apr.match(/[a-zA-Z]/) || loan_amount.to_f < 0 
   end
 
   duration = ''
   loop do
     prompt("What is the loan duration (in months):")
     duration = gets.chomp
-    break unless duration.empty? || duration.match(/[a-zA-Z]/)
+    break unless duration.empty? || duration.match(/[a-zA-Z]/) || loan_amount.to_i < 0 
   end
 
   loan_amount = float_it(loan_amount)
