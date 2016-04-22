@@ -1,6 +1,7 @@
 VALID_PAIRS = { 'r' => 'rock', 'p' => 'paper', 's' => 'scissors', 'l' => 'lizard', 'k' => 'spock' }.freeze
 VALID_CHOICES = %w(rock paper scissors lizard spock).freeze
-MAXIUM_WINS = 5
+MAXIMUM_WINS = 5
+WINNING_COMBOS = { 'rock' => %w(scissors lizard'), 'paper' => %w(rock spock), 'scissors' => %w(paper lizard), 'lizard' => %w(spock paper), 'spock' => %w(scissors rock) }.freeze
 
 def clear_screen
   system('clear') || system('cls')
@@ -10,26 +11,17 @@ def prompt(message)
   puts("=> #{message}")
 end
 
-def win?(first, second)
-  (first == 'rock' && (second == 'scissors' || second == 'lizard')) ||
-    (first == 'paper' && (second == 'rock' || second == 'spock')) ||
-    (first == 'scissors' && (second == 'paper' || second == 'lizard')) ||
-    (first == 'lizard' && (second == 'spock' || second == 'paper')) ||
-    (first == 'spock' && (second == 'scissors' || second == 'rock'))
-end
-
 # def win?(first, second)
-#   (first == 'rock' && second == 'scissors') ||
-#     (first == 'rock' && second == 'lizard') ||
-#     (first == 'paper' && second == 'rock') ||
-#     (first == 'paper' && second == 'spock') ||
-#     (first == 'scissors' && second == 'paper') ||
-#     (first == 'scissors' && second == 'lizard') ||
-#     (first == 'lizard' && second == 'spock') ||
-#     (first == 'lizard' && second == 'paper') ||
-#     (first == 'spock' && second == 'scissors') ||
-#     (first == 'spock' && second == 'rock')
+#   (first == 'rock' && (second == 'scissors' || second == 'lizard')) ||
+#     (first == 'paper' && (second == 'rock' || second == 'spock')) ||
+#     (first == 'scissors' && (second == 'paper' || second == 'lizard')) ||
+#     (first == 'lizard' && (second == 'spock' || second == 'paper')) ||
+#     (first == 'spock' && (second == 'scissors' || second == 'rock'))
 # end
+
+def win?(first, second)
+  WINNING_COMBOS[first].include?(second)
+end
 
 def display_result(player, computer)
   if win?(player, computer)
@@ -43,32 +35,32 @@ end
 
 def user_keep_score(player, computer, user_wins)
   if win?(player, computer)
-    user_wins += 1
+    user_wins + 1
   else
-    user_wins = user_wins
+    user_wins
   end
 end
 
 def computer_keep_score(player, computer, computer_wins)
   if win?(computer, player)
-    computer_wins += 1
+    computer_wins + 1
   else
-    computer_wins = computer_wins
+    computer_wins
   end
 end
 
 def display_score(user_wins, computer_wins) # keeps track of number of wins for each side
-  if user_wins == MAXIUM_WINS
-    prompt("Congratulations, You collected #{MAXIUM_WINS} wins. You won the entire game!")
-  elsif computer_wins == MAXIUM_WINS
-    prompt("Sorry, Computer has won #{MAXIUM_WINS} times before you #sad_day")
+  if user_wins == MAXIMUM_WINS
+    prompt("Congratulations, You collected #{MAXIMUM_WINS} wins. You won the entire game!")
+  elsif computer_wins == MAXIMUM_WINS
+    prompt("Sorry, Computer has won #{MAXIMUM_WINS} times before you #sad_day")
   else
     prompt("Current Score is #{user_wins}(User):#{computer_wins}(Computer)")
   end
 end
 
 prompt("<<<Wecome to the Ultimate Game of Rock-Paper-Scissors-Lizard-Spock>>>")
-prompt("Objective of the game is to accumulate #{MAXIUM_WINS} wins before the computer does.")
+prompt("Objective of the game is to accumulate #{MAXIMUM_WINS} wins before the computer does.")
 prompt("Got it? Good. Let us begin.")
 
 loop do
@@ -107,16 +99,23 @@ loop do
 
     display_score(user_wins, computer_wins)
 
-    sleep 2
+    sleep 1
 
     clear_screen
 
-    break if user_wins == MAXIUM_WINS || computer_wins == MAXIUM_WINS
+    break if user_wins == MAXIMUM_WINS || computer_wins == MAXIMUM_WINS
   end
 
-  prompt("Do you want to play again? Click 'Y' or 'N'")
-  answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+  answer = ''
+
+  loop do
+    prompt("Do you want to play again? Click 'Y' or 'N'")
+    answer = gets.chomp
+    break if answer.downcase.start_with?('y', 'n')
+    prompt("Erroneous entry. Please try entering either Y or N.")
+  end
+
+  break if answer.downcase.start_with?('n')
 end
 
 prompt("Thank you for playing. Good bye!")
