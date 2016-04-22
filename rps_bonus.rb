@@ -1,30 +1,35 @@
 VALID_PAIRS = { 'r' => 'rock', 'p' => 'paper', 's' => 'scissors', 'l' => 'lizard', 'k' => 'spock' }.freeze
 VALID_CHOICES = %w(rock paper scissors lizard spock).freeze
+MAXIUM_WINS = 5
+
+def clear_screen
+  system('clear') || system('cls')
+end
 
 def prompt(message)
   puts("=> #{message}")
 end
 
-# def win?(first, second)
-#   (first == 'rock' && second == 'scissors' || second =='lizard') ||
-#     (first == 'paper' && second == 'rock' || second == 'spock') ||
-#     (first == 'scissors' && second == 'paper' || second == 'lizard') ||
-#     (first == 'lizard' && second == 'spock' || second == 'paper') ||
-#     (first == 'spock' && second == 'scissors' || second == 'rock')
-# end
-
 def win?(first, second)
-  (first == 'rock' && second == 'scissors') ||
-    (first == 'rock' && second == 'lizard') ||
-    (first == 'paper' && second == 'rock') ||
-    (first == 'paper' && second == 'spock') ||
-    (first == 'scissors' && second == 'paper') ||
-    (first == 'scissors' && second == 'lizard') ||
-    (first == 'lizard' && second == 'spock') ||
-    (first == 'lizard' && second == 'paper') ||
-    (first == 'spock' && second == 'scissors') ||
-    (first == 'spock' && second == 'rock')
+  (first == 'rock' && (second == 'scissors' || second == 'lizard')) ||
+    (first == 'paper' && (second == 'rock' || second == 'spock')) ||
+    (first == 'scissors' && (second == 'paper' || second == 'lizard')) ||
+    (first == 'lizard' && (second == 'spock' || second == 'paper')) ||
+    (first == 'spock' && (second == 'scissors' || second == 'rock'))
 end
+
+# def win?(first, second)
+#   (first == 'rock' && second == 'scissors') ||
+#     (first == 'rock' && second == 'lizard') ||
+#     (first == 'paper' && second == 'rock') ||
+#     (first == 'paper' && second == 'spock') ||
+#     (first == 'scissors' && second == 'paper') ||
+#     (first == 'scissors' && second == 'lizard') ||
+#     (first == 'lizard' && second == 'spock') ||
+#     (first == 'lizard' && second == 'paper') ||
+#     (first == 'spock' && second == 'scissors') ||
+#     (first == 'spock' && second == 'rock')
+# end
 
 def display_result(player, computer)
   if win?(player, computer)
@@ -53,17 +58,17 @@ def computer_keep_score(player, computer, computer_wins)
 end
 
 def display_score(user_wins, computer_wins) # keeps track of number of wins for each side
-  if user_wins == 5
-    prompt("Congratulations, You collected 5 wins. You won the entire game!")
-  elsif computer_wins == 5
-    prompt("Sorry, Computer has won 5 times before you #sad_day")
+  if user_wins == MAXIUM_WINS
+    prompt("Congratulations, You collected #{MAXIUM_WINS} wins. You won the entire game!")
+  elsif computer_wins == MAXIUM_WINS
+    prompt("Sorry, Computer has won #{MAXIUM_WINS} times before you #sad_day")
   else
     prompt("Current Score is #{user_wins}(User):#{computer_wins}(Computer)")
   end
 end
 
 prompt("<<<Wecome to the Ultimate Game of Rock-Paper-Scissors-Lizard-Spock>>>")
-prompt("Objective of the game is to accumulate five wins before the computer does.")
+prompt("Objective of the game is to accumulate #{MAXIUM_WINS} wins before the computer does.")
 prompt("Got it? Good. Let us begin.")
 
 loop do
@@ -84,7 +89,7 @@ loop do
   loop do
     loop do
       prompt(hand_prompt)
-      choice = gets.chomp
+      choice = gets.chomp.downcase
       user_choice = VALID_PAIRS[choice] # converts into fully spelled out choice e.g. 'r' to 'rock'
 
       break if VALID_CHOICES.include?(user_choice)
@@ -102,10 +107,14 @@ loop do
 
     display_score(user_wins, computer_wins)
 
-    break if user_wins == 5 || computer_wins == 5
+    sleep 2
+
+    clear_screen
+
+    break if user_wins == MAXIUM_WINS || computer_wins == MAXIUM_WINS
   end
 
-  prompt("Do you want to play again?")
+  prompt("Do you want to play again? Click 'Y' or 'N'")
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
 end
